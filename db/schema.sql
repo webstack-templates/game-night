@@ -1,0 +1,19 @@
+CREATE TABLE IF NOT EXISTS games (
+  id SERIAL PRIMARY KEY,
+  title TEXT NOT NULL,
+  min_players INTEGER NOT NULL DEFAULT 1,
+  max_players INTEGER NOT NULL DEFAULT 4,
+  play_minutes INTEGER,
+  added_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS plays (
+  id SERIAL PRIMARY KEY,
+  game_id INTEGER NOT NULL REFERENCES games(id) ON DELETE CASCADE,
+  played_on DATE NOT NULL DEFAULT CURRENT_DATE,
+  player_count INTEGER,
+  winner TEXT,
+  notes TEXT
+);
+
+CREATE INDEX IF NOT EXISTS plays_game_id_idx ON plays (game_id);
